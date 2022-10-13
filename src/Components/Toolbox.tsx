@@ -11,20 +11,26 @@ import {
     ArchiveBoxArrowDownIcon,
     TrashIcon,
     InformationCircleIcon,
-    SwatchIcon
+    SwatchIcon,
+    VariableIcon,
+    PhotoIcon
 } from '@heroicons/react/24/outline'
 import Tippy from '@tippyjs/react'
 
 type Props = {
-    props?: React.AllHTMLAttributes<HTMLDivElement>,
-    setTools: React.Dispatch<SetStateAction<string | null>>,
+    props?: React.AllHTMLAttributes<HTMLDivElement>
+    setTools: React.Dispatch<SetStateAction<string | null>>
     setStrokeColor: React.Dispatch<SetStateAction<string | null>>
+    setShowModal: React.Dispatch<SetStateAction<boolean | null>>
+    setShowFileModal: React.Dispatch<SetStateAction<boolean | null>>
 }
 
 export default function Toolbox({
     props,
     setTools,
-    setStrokeColor
+    setStrokeColor,
+    setShowModal,
+    setShowFileModal
 }: Props) {
 
     const colorPickerRef = useRef<HTMLInputElement | null>(null)
@@ -36,65 +42,51 @@ export default function Toolbox({
             name: 'selectionTool',
             icon: <CursorArrowRaysIcon className={iconSize} />,
             label: 'Selection Tool',
-            function: () => {
-
-            }
         },
         {
             name: 'brushTool',
             icon: <PaintBrushIcon className={iconSize} />,
             label: 'Brush Tool',
-            function: () => {
-
-            }
+        },
+        {
+            name: 'imageUpload',
+            icon: <PhotoIcon className={iconSize} />,
+            label: 'Put an Image'
         },
         {
             name: 'rectangleTool',
             icon: <Squares2X2Icon className={iconSize} />,
             label: 'Rectangles Tool',
-            function: () => {
-
-            }
         },
         {
             name: 'ovalTool',
             icon: <PlusCircleIcon className={iconSize} />,
-            label: 'Ovals Tool',
-            function: () => {
-
-            }
+            label: 'Circle Tool',
         },
         {
             name: 'lineTool',
             icon: <ArrowTrendingUpIcon className={iconSize} />,
             label: 'Line Tool',
-            function: () => {
-
-            }
         },
         {
             name: 'bucketTool',
             icon: <ArchiveBoxArrowDownIcon className={iconSize} />,
             label: 'Bucket Tool',
-            function: () => {
-
-            }
+        },
+        {
+            name: 'textTool',
+            icon: <VariableIcon className={iconSize} />,
+            label: 'Text Tool'
         },
         {
             name: 'eraserTool',
             icon: <TrashIcon className={iconSize} />,
             label: 'Eraser Tool',
-            function: () => {
-
-            }
         },
         {
             name: 'colorPicker',
             icon: <SwatchIcon className={iconSize} />,
             label: 'Pick a Color',
-            function: () => {
-
-            }
         }
     ]
 
@@ -121,9 +113,21 @@ export default function Toolbox({
                                 <button
                                     onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                                         e.preventDefault()
-                                        setTools(tool.name)
-                                        if (tool.name === 'colorPicker') {
-                                            colorPickerRef.current?.click()
+
+
+                                        switch (tool.name) {
+                                            case 'imageUpload':
+                                                setShowFileModal(true)                                                
+                                                break;
+                                            case 'textTool':
+                                                setShowModal(true)                                                
+                                                break;
+                                            case 'colorPicker':                                                
+                                                colorPickerRef.current?.click()
+                                                break;                                        
+                                            default:
+                                                setTools(tool.name)
+                                                break;
                                         }
                                     }}
                                 >
